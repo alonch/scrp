@@ -1,4 +1,4 @@
-application: your-app-id
+application: robotscalgary
 version: 1
 runtime: python27
 api_version: 1
@@ -11,6 +11,8 @@ handlers:
 - url: /images
   static_dir: view/images
 
+- url: /js
+  static_dir: view/js
 - url: /.*
   script: routes.application
 

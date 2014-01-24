@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ head }}
+  </head>
+
+  <body>
+    {{ header }}
+    <div class="tab-content">
+      <div class="tab-pane active" id="home">{{ home }}</div>
+      <div class="tab-pane" id="events">{{ events }}</div>
+      <div class="tab-pane" id="whatdowedo">{{ whatdowedo }}</div>
+      <div class="tab-pane" id="info">{{ info }}</div>
+    </div><!-- /.container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/helper.js"></script>
+    <script type="text/javascript">
+      function clear(){        
+        $(".tab-pane").each(function(){
+          $(this).removeClass("active");
+        })
+      }
+      function updateByHash(){
+        var hash = window.location.hash;
+        if (hash=="" || $(hash).hasClass("active")){
+          return;
+        } 
+        clear();
+        $(hash).addClass("active");
+        $('#tabs a[href="{0}"]'.format(hash)).tab("show");
+      }
+      $('a[data-toggle="tab"]').on('shown.bs.tab', 
+        function (e) {
+          window.location.hash=$(e.target).attr('href');
+        }
+      );
+      $(window).bind('hashchange', updateByHash);
+      $("document").ready(function(){
+        updateByHash();
+        }
+      );
+    </script>
+  </body>
+</html>
