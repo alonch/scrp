@@ -15,7 +15,7 @@ class Person(ndb.Model):
     tshirt_size = ndb.StringProperty()
     personType = ndb.StringProperty()
 
-class Kid(nbd.Model):
+class Kid(ndb.Model):
 	person = ndb.KeyProperty()
 	parents = ndb.KeyProperty(repeated=True)
 	grade = ndb.StringProperty()
@@ -45,8 +45,8 @@ class Event(ndb.Model):
 	address = ndb.StringProperty()
 
 class Attendance(ndb.Model):
-	person = KeyProperty()
-	event = KeyProperty()
+	person = ndb.KeyProperty()
+	event = ndb.KeyProperty()
 
 
 
