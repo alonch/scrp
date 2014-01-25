@@ -4,8 +4,40 @@
 	</head>
 	<body>
 		{{ header }}
-		<a> hello world </a>
+		<style type="text/css">
+		.content{
+			margin-top: 40px;
+		}
+		</style>
  		<!-- my code goes here-->
+		<div class="panel panel-default content">
+			<div class="panel-body">
+				<label> I want to help as:</label>
+		 		<div class="btn-group" data-toggle="buttons-radio">
+				  <button type="button" class="btn btn-default active" onclick="select(this)">Mentor</button>
+				  <button type="button" class="btn btn-default" onclick="select(this)">Mentee</button>
+				</div>
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="mentor"> uno </div>
+					<div class="tab-pane" id="mentee"> dos </div>
+				</div>
+			</div>
+		</div>
+ 		<!-- my code has ended -->
 		{{ js }}
+		<script type="text/javascript">
+		document.select = function select(e){
+			//clear tabs pane
+			$(".tab-pane").each(function(){$(this).removeClass("active")})
+			//selecting pane
+			id = $(e).text().toLowerCase();
+			id = "#{0}".format(id); 
+			$(id).each(function(){$(this).addClass("active")})
+
+			//clear other button's selecction
+			$(".btn-group button").each(function(){$(this).removeClass("active")})
+		}
+		</script>
 	</body>
 </html>
