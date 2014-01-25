@@ -11,10 +11,17 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul id="tabs" class="nav navbar-nav">
-        <li class="active"><a href="{{"/" if page != "/" else ""}}#home" data-toggle="tab">Home</a></li>
-        <li><a href="{{"/" if page != "/" else ""}}#events" data-toggle="tab">Events</a></li>
-        <li><a href="{{"/" if page != "/" else ""}}#whatdowedo" data-toggle="tab">What do we do?</a></li>
-        <li><a href="{{"/" if page != "/" else ""}}#info" data-toggle="tab">Our Info</a></li>
+        {% if page=="/" %}
+          <li><a href="#home" data-toggle="tab">Home</a></li>
+          <li><a href="#events" data-toggle="tab">Events</a></li>
+          <li><a href="#whatdowedo" data-toggle="tab">What do we do?</a></li>
+          <li><a href="#info" data-toggle="tab">Our Info</a></li>
+        {% else %}
+          <li><a href="/#home">Home</a></li>
+          <li><a href="/#events">Events</a></li>
+          <li><a href="/#whatdowedo">What do we do?</a></li>
+          <li><a href="/#info">Our Info</a></li>
+        {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {% if not user.is_logged %}

@@ -13,12 +13,7 @@
       <div class="tab-pane" id="whatdowedo">{{ whatdowedo }}</div>
       <div class="tab-pane" id="info">{{ info }}</div>
     </div><!-- /.container -->
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/helper.js"></script>
+    {{ js }}
     <script type="text/javascript">
       function clear(){        
         $(".tab-pane").each(function(){
@@ -27,7 +22,11 @@
       }
       function updateByHash(){
         var hash = window.location.hash;
-        if (hash=="" || $(hash).hasClass("active")){
+        if (hash==""){
+          $('#tabs a[href="#home"]').tab("show");
+          return
+        }
+        if ($(hash).hasClass("active")){
           return;
         } 
         clear();

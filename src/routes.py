@@ -21,6 +21,7 @@ class MainPage(webapp2.RequestHandler):
     	index = env.get_template('index.html')
     	content['head'] = env.get_template('default/head.html').render()
     	content['header'] = get_header('/')
+    	content['js'] = env.get_template('default/js.html').render()
 
     	keys = ['home','events','whatdowedo','info']
     	for key in keys:
@@ -33,6 +34,7 @@ class SignUpPage(webapp2.RequestHandler):
     	content = {}
     	content['head'] = env.get_template('default/head.html').render()
     	content['header'] = get_header("sign-up")
+    	content['js'] = env.get_template('default/js.html').render()
     	index = env.get_template('sign-up.html')
 
     	self.response.write(index.render(content))
