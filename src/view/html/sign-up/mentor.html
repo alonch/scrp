@@ -1,0 +1,161 @@
+<form class="form-horizontal" name=''id='registration' action='sign-up' method='post' role="form">
+  <input type='hidden' name='personType' id='personType'/>	
+  <div class="form-group">
+    <label for="first_name" class="col-sm-2 control-label">First Name</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name='first_name' id="first_name" placeholder="First Name">
+    </div>
+    <label for="last_name" class="col-sm-2 control-label">Last Name</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" name='last_name' id="last_name" placeholder="Last Name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="email" class="col-sm-2 control-label">E-Mail</label>
+    <div class="col-sm-4">
+      <input type="email" name='email' class="form-control" id="email" placeholder="E-Mail">
+    </div>
+  	<label for="phone" class="col-sm-2 control-label">Phone Number</label>
+    <div class="col-sm-4">
+      <input type="text" class="form-control" id="phone" name='phone' placeholder="Phone Number">
+    </div>
+  </div>
+
+  <div class="form-group">
+  	
+  	<label for="gender" class="col-sm-2 control-label">Gender</label>
+    <div class="col-sm-4">
+      <select class="form-control" id="gender" name='gender'>
+      	<option>Dont want to answer</option>
+      	<option>Male</option>
+      	<option>Female</option>
+      </select>
+    </div>
+
+    <label for="tshirt_size" class="col-sm-2 control-label">T-Shirt Size</label>
+    <div class="col-sm-4">
+      <select class="form-control" id="tshirt_size" name='tshirt_size'>
+      	<option>Less than XS</option>
+      	<option>XS</option>
+      	<option>S</option>
+      	<option selected="selected">M</option>
+      	<option>L</option>
+      	<option>XL</option>
+      	<option>more than XL</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- START | Mentor -->
+
+  <div class="form-group">
+    <label for="affiliation" class="col-sm-2 control-label">Affiliation</label>
+    <div class="col-sm-4">
+      <select class="form-control" id="affiliation" name='affiliation'>
+      	<option>UofC</option>
+      	<option>Mount Royal</option>
+      	<option>Sait</option>
+      	<option>Private Company</option>
+      	<option>Goverment</option>
+      	<option>Other</option>
+      </select>
+    </div>
+  	<label for="affiliation_status" class="col-sm-2 control-label">Affiliation Status</label>
+    <div class="col-sm-4">
+      <select class="form-control" id="affiliation_status" name='affiliation_status'>
+      	<option>First year</option>
+      	<option>Second year</option>
+      	<option>Four year</option>
+      	<option>Alumni (Graduated)</option>
+      	<option>Graduated studies/PostDoc</option>
+      	<option selected='selected'>Not a student</option>
+      </select>
+    </div>
+  </div>
+	
+
+  <div class="form-group">
+    <label for="discipline" class="col-sm-2 control-label">Discipline</label>
+    <div class='col-sm-10'>
+	    <select id="discipline" name="discipline" class="form-control">
+			<option>Department of Electrical and Computer Engineering</option>
+			<option>Department of Mechanical and Manufacturing Engineering</option>
+			<option>Department of Civil Engineering</option>
+			<option>Department of Chemical and Petroleum Engineering</option>
+			<option>Other discipline</option>
+			<option selected="selected">Not a student</option>
+		</select>
+  	</div>
+  </div>
+  <div class="form-group">
+    <label for='cpr_trained' class="col-sm-2 control-label">CPR Trained</label>
+  	<div class="checkbox col-sm-offset-1 col-sm-9">
+          <input  type="checkbox" name='cpr_trained' id='cpr_trained'>
+      </div>
+  </div>
+  
+  <div class='form-group'>
+  	<div class="panel panel-default" style='margin-left:15px;margin-right:15px;'>
+  		<div class="panel-body">
+  			<div class='form-group'>
+  				<div class='col-sm-offset-2 col-sm-10 bg-primary'>
+  					<h3>Pleace provide two references</h3>
+  				</div>
+  			</div>
+   			<div class="form-group">
+   				<label for='reference_name1' class='col-sm-2 control-label'>Reference #1
+   				</label>
+   				<div class='col-sm-3'>
+	   				<input type='text' class='form-control' name='reference_name1' id='reference_name1' placeholder='Name'> 
+	   				</div>
+	   				<div class='col-sm-3'>
+   						<input type='text' class='form-control' name='reference_number1' id='reference_number1' placeholder='Number'>
+   					</div>
+   					<div class='col-sm-4'>
+   						<input type='email' class='form-control' name='reference_email1' id='reference_email1' placeholder='E-mail'>
+   					</div>
+   			</div>
+   			<div class="form-group">
+   				<label for='reference_name2' class='col-sm-2 control-label'>Reference #2
+   				</label>
+   				<div class='col-sm-3'>
+	   				<input type='text' class='form-control' name='reference_name2' id='reference_name2' placeholder='Name'> 
+	   				</div>
+	   				<div class='col-sm-3'>
+   						<input type='text' class='form-control' name='reference_number2' id='reference_number2' placeholder='Number'>
+   					</div>
+   					<div class='col-sm-4'>
+   						<input type='email' class='form-control' name='reference_email2' id='reference_email2' placeholder='E-mail'>
+   					</div>
+   			</div>
+  		</div>
+	</div>
+  </div>
+
+  <!-- END -->
+
+  <div class="form-group">
+  	<label class="col-sm-2 control-label">I agree with:</label>
+    <div class="col-sm-4">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name='liability_signed' id='liability_signed'>
+          	<a href="#TODO" class="btn-link"> the Liability Policy</a>
+        </label>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name='media_signed' id='media_signed'> 
+          	<a href="#TODO" class="btn-link">the Media Release Policy</a>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
