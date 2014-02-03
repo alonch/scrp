@@ -14,8 +14,18 @@ class Person(ndb.Model):
     personType = ndb.StringProperty()
     gender = ndb.StringProperty()
 
+    @staticmethod
+    def get_mentors():
+    	query = Person.query(Person.personType == 'Mentor')
+        persons = gql_json_parser(query)
+        for person in persons:
+        	mentor = Mentor.get_by_person(person['key'])
+        	del mentor['key']
+        	person.update(mentor)
+        return persons
+
 class Kid(ndb.Model):
-	person = ndb.KeyProperty()
+	h_person = ndb.KeyProperty()
 	parents = ndb.KeyProperty(repeated=True)
 	grade = ndb.StringProperty()
 	school = ndb.StringProperty()
@@ -23,6 +33,7 @@ class Kid(ndb.Model):
 	birthdate = ndb.DateProperty()
 
 class Mentor(ndb.Model):
+	h_person = ndb.KeyProperty()
 	#which university or company
 	affiliation = ndb.StringProperty()
 	#First Year, Graduated, Etc.
@@ -43,6 +54,12 @@ class Mentor(ndb.Model):
 	reference_phone2 = ndb.StringProperty()
 	reference_email2 = ndb.StringProperty()
 
+	@staticmethod
+	def get_by_person(person_key):
+		logging.info(person_key)
+		query = Mentor.query(Mentor.h_person == person_key)
+		mentor = gql_json_parser(query)
+		return mentor[0] if len(mentor) > 0 else {}
 
 class Event(ndb.Model):
 	start = ndb.DateTimeProperty()
@@ -60,7 +77,7 @@ class Attendance(ndb.Model):
 def gql_json_parser(query_obj):
     result = []
     for entry in query_obj:
-        result.append(dict([(p, unicode(getattr(entry, p))) for p in get_keys(entry.__class__)]))
+        result.append(dict([(p, getattr(entry, p)) for p in get_keys(entry.__class__)+['key']]))
     return result
 
 def get_keys(cls):

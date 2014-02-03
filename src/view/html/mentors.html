@@ -1,0 +1,38 @@
+
+
+<html>
+	<head>
+		{{ head }}
+	</head>
+	<body>
+		{{ header }}
+		<div class="panel panel-default content">
+			<div class="panel-body">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Last, First Name</th>
+							<th>Phone </th>
+							<th>E-Mail</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						
+						{% for mentor in mentors %}
+							<tr>
+								<th>{{loop.index}}</th>
+								<th>{{mentor['last_name']}}, {{mentor['first_name']}}</th>
+								<th>{{mentor['phone']}}</th>
+								<th>{{mentor['email']}}</th>
+							</tr>	
+						{% endfor%}
+					</body>
+				
+				</table>
+				
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,70 +1,82 @@
 import os, urllib, webapp2, jinja2, db, json
 from google.appengine.ext import ndb
+import logging
 
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)+"/view/html"),
     extensions=['jinja2.ext.autoescape'],
     autoescape=False)
 
-def get_header(page):
+def get_env(req):
+    content = {}
+    content['head'] = env.get_template('default/head.html').render()
+    content['header'] = get_header(req)
+    content['js'] = env.get_template('default/js.html').render()
+    return content
+
+def get_header(req):
     content = {}
     user = {}
     user['is_logged'] = False
     user['nickname'] = 'Alonch'
     content['user'] = user
-    content['page'] = page
+    content['page'] = req.path
     return env.get_template('default/header.html').render(content)
+
+def render(res, page, keys=[], content={}):
+    html = env.get_template('%s.html' % page)
+    for key in keys:
+        content[key] = env.get_template('%s/%s.html' % (page,key)).render()
+    res.write(html.render(content))
 
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-    	content = {}
-    	index = env.get_template('index.html')
-    	content['head'] = env.get_template('default/head.html').render()
-    	content['header'] = get_header('/')
-    	content['js'] = env.get_template('default/js.html').render()
-
-    	keys = ['home','events','whatdowedo','info']
-    	for key in keys:
-    		content[key] = env.get_template('index/%s.html' % key).render()
-        self.response.write(index.render(content))
+    	content = get_env(self.request)
+        render(self.response, "index", ['home','events','whatdowedo','info'], content)
 
 class SignUpPage(webapp2.RequestHandler):
 
     def get(self):
-    	content = {}
-    	content['head'] = env.get_template('default/head.html').render()
-    	content['header'] = get_header("sign-up")
-    	content['js'] = env.get_template('default/js.html').render()
-    	index = env.get_template('sign-up.html')
-        keys = ['mentee', 'mentor']
-        for key in keys:
-            content[key] = env.get_template('sign-up/%s.html' % key).render()
-    	self.response.write(index.render(content))
-        
+    	content = get_env(self.request)
+        render(self.response, 'sign-up', ['mentee', 'mentor'], content)
+
     def post(self):
         get = self.request.get
         person = db.Person()
         db.request_python_parser(person, get)
+        personKey = person.put()
+        typ = get('personType')
+        if typ == 'Mentor':
+            mentor = db.Mentor()
+            db.request_python_parser(mentor, get)
+            mentor.h_person = personKey 
+            mentor.put()
+        elif typ == 'Mentee':
+            kid = db.Kid()
+            db.request_python_parser(kid, get)
+            kid.h_person = personKey    
+            kid.put()
+        else:
+            personKey.delete()
+            self.response.write("error.. :/ sorry")
+            return
 
-        mentor = db.Mentor()
-
-        #for key in mentor.keys:
-         #   pass
-            #setattr(mentor, key, get(key))
-        person.put()
-        #mentor.put()
         self.response.write("ok")
 
   
 class ShowMentorPage(webapp2.RequestHandler):
 
     def get(self):
-        query_data = db.Person.query()
-        json_query_data = db.gql_json_parser(query_data)
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(json.dumps(json_query_data))
+        content = get_env(self.request)
+        mentors = db.Person.get_mentors()
+        for mentor in mentors:
+            mentor['key'] = mentor['key'].id()
+        content['mentors'] = mentors
 
+        render(self.response, 'mentors',content=content)    
+
+        
 class ClearMentorPage(webapp2.RequestHandler):
 
     def get(self):
