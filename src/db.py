@@ -29,13 +29,20 @@ class Mentor(ndb.Model):
 	affiliation_status = ndb.StringProperty()	
 	#Electrical, Computer Science
 	discipline = ndb.StringProperty()
-	_active = ndb.BooleanProperty()
-	police_done = ndb.BooleanProperty()
-	police_comments = ndb.StringProperty()
-	police_date = ndb.DateProperty()
-	references_ok = ndb.BooleanProperty()
-	references_comments = ndb.StringProperty()
+	h_active = ndb.BooleanProperty()
+	h_police_done = ndb.BooleanProperty()
+	h_police_comments = ndb.StringProperty()
+	h_police_date = ndb.DateProperty()
+	h_references_ok = ndb.BooleanProperty()
+	h_references_comments = ndb.StringProperty()
 	cpr_trained = ndb.BooleanProperty()
+	reference_name1 = ndb.StringProperty()
+	reference_phone1 = ndb.StringProperty()
+	reference_email1 = ndb.StringProperty()
+	reference_name2 = ndb.StringProperty()
+	reference_phone2 = ndb.StringProperty()
+	reference_email2 = ndb.StringProperty()
+
 
 class Event(ndb.Model):
 	start = ndb.DateTimeProperty()
@@ -59,7 +66,7 @@ def gql_json_parser(query_obj):
 def get_keys(cls):
 	attr = []
 	for key in dir(cls):
-            if "key" == key or key[0] == '_':
+            if "key" == key or key[0] == '_' or key[:2] == 'h_':
                 continue
             if isinstance(getattr(cls, key),ndb.Property):
                 attr.append(key)

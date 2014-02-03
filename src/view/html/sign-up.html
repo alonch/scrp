@@ -35,7 +35,10 @@
 			//selecting pane
 			id = $(e).text().toLowerCase();
 			id = "#{0}".format(id); 
-			$(id).each(function(){$(this).addClass("active")})
+			$(id).each(function(){
+				$('input[name=personType]').val($(e).text());
+				$(this).addClass("active")
+			})
 
 			//clear other button's selecction
 			$(".btn-group button").each(function(){$(this).removeClass("active")})
