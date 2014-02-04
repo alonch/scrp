@@ -3,10 +3,16 @@
 		{{ head }}
 	</head>
 	<body>
-		{{ header }}
+		<!--
+		{{ header }} 
+		<!-- -->
+
 		<style type="text/css">
+		body{
+			padding: 0px 0px;/*remove*/
+		}
 		.content{
-			margin-top: 40px;
+			/*margin-top: 40px;*//*remove*/
 		}
 		</style>
 
@@ -20,7 +26,7 @@
 		 		</div>
 		 		<div class="btn-group col-sm-offset-3 col-sm-9" data-toggle="buttons-radio" style='margin-bottom:15px;'>
 				  <button type="button" class="btn btn-default active" onclick="select(this)">Mentor</button>
-				  <button type="button" class="btn btn-default" onclick="select(this)">Mentee</button>
+				  <button type="button" class="btn btn-default" onclick="select(this)" disabled>Mentee</button>
 				</div>
 
 				<div class="tab-content" >
@@ -31,21 +37,6 @@
 		</div>
  		<!-- my code has ended -->
 		{{ js }}
-		<script type="text/javascript">
-		document.select = function select(e){
-			//clear tabs pane
-			$(".tab-pane").each(function(){$(this).removeClass("active")})
-			//selecting pane
-			id = $(e).text().toLowerCase();
-			id = "#{0}".format(id); 
-			$(id).each(function(){
-				$('input[name=personType]').val($(e).text());
-				$(this).addClass("active")
-			})
-
-			//clear other button's selecction
-			$(".btn-group button").each(function(){$(this).removeClass("active")})
-		}
-		</script>
+		<script src="/js/sign-up.js"></script>
 	</body>
 </html>

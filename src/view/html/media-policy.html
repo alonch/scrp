@@ -1,0 +1,57 @@
+
+
+<html>
+	<head>
+		{{ head }}
+	</head>
+	<body>
+		<!--
+		{{ header }}
+		<!-- -->
+		<style type="text/css">
+		body{
+			padding: 0px 0px;
+		}
+		</style>
+		<div class="panel panel-default content">
+			<div class="panel-body">
+				<h2>Media Policy</h2>
+				<center>
+					<iframe src="http://docs.google.com/viewer?url=https%3A%2F%2Fdocs.google.com%2Fuc%3Fexport%3Ddownload%26id%3D0B9UhTc1-I_vLcUtCTU5DbUxsZFk&embedded=true" width="775" height="400" style="border: none;"></iframe>
+				</center>
+				<br>
+				<form class="form-horizontal" role="form" id='acceptance' method='post' action='/media-policy'>
+				  <div class="form-group">
+				    <label for="initials" class="col-sm-2 control-label">Initials</label>
+				    <div class="col-sm-4">
+				      <input type="text" class="form-control" id="initials" name='initials' placeholder="Initials">
+				    </div>
+				    <label for="today" class="col-sm-2 control-label">Today</label>
+					<div class="col-sm-4">
+				  		<input type="date" class="form-control" id="today" name='today'>
+					</div>
+				  </div>
+				  <div class="form-group">
+				    <label for="email" class="col-sm-2 control-label">Email</label>
+				    <div class="col-sm-10">
+				      <input type="email" class="form-control" id="email" name='email' placeholder="Email">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label for='agree' class='col-sm-offset-1 col-sm-2 control-label'>I Agree</label>
+				    <div class="col-sm-9 checkbox">
+				        <input type="checkbox" id='agree' name='agree'> 
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="col-sm-offset-2 col-sm-10">
+				      <button type="submit" class="btn btn-default">I Agree</button>
+				    </div>
+				  </div>
+				</form>
+			</div>
+		</div>
+		{{ js }}
+		<script src="/js/media-policy.js"></script>
+	</body>
+</html>

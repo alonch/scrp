@@ -6,6 +6,7 @@
 	</head>
 	<body>
 		{{ header }}
+		<h2>Mentors</h2>
 		<div class="panel panel-default content">
 			<div class="panel-body">
 				<table class="table table-hover">
@@ -15,20 +16,36 @@
 							<th>Last, First Name</th>
 							<th>Phone </th>
 							<th>E-Mail</th>
+							<th>Gender</th>
+							<th>Affiliation</th>
+							<th>Status</th>
+							<th>Discipline</th>
+							<th>CPR</th>
 						</tr>
 					</thead>
 					<tbody>
-
-						
 						{% for mentor in mentors %}
 							<tr>
-								<th>{{loop.index}}</th>
-								<th>{{mentor['last_name']}}, {{mentor['first_name']}}</th>
-								<th>{{mentor['phone']}}</th>
-								<th>{{mentor['email']}}</th>
+								<td style='display:None;'>{{mentor['key']}}</td>
+								<td>{{loop.index}}</td>
+								<td>{{mentor['last_name']}}, {{mentor['first_name']}}</td>
+								<td>{{mentor['phone']}}</td>
+								<td>{{mentor['email']}}</td>
+								<td>{{mentor['gender']}}</td>
+								<td>{{mentor['affiliation']}}</td>
+								<td>{{mentor['affiliation_status']}}</td>
+								<td width='20%'><small>{{mentor['discipline']}}</small></td>
+								<td>
+									{% if mentor['cpr_trained'] %}
+									<input type="checkbox" checked onclick="return false">
+									{% else %}
+									<input type="checkbox" onclick="return false">
+									{% endif %}
+								</td>
+								
 							</tr>	
 						{% endfor%}
-					</body>
+					</tbody>
 				
 				</table>
 				

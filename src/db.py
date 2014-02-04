@@ -1,6 +1,5 @@
 from google.appengine.ext import ndb
 from datetime import datetime
-import json
 import logging
 
 class Person(ndb.Model):
@@ -8,15 +7,15 @@ class Person(ndb.Model):
     last_name = ndb.StringProperty()
     phone = ndb.StringProperty()
     email = ndb.StringProperty()
-    liability_signed = ndb.BooleanProperty()
-    media_signed = ndb.BooleanProperty()
+    h_liability_signed = ndb.BooleanProperty()
+    h_media_signed = ndb.BooleanProperty()
     tshirt_size = ndb.StringProperty()
     personType = ndb.StringProperty()
     gender = ndb.StringProperty()
 
     @staticmethod
     def get_mentors():
-    	query = Person.query(Person.personType == 'Mentor')
+    	query = Person.query(Person.personType == 'Mentor').order(Person.last_name)
         persons = gql_json_parser(query)
         for person in persons:
         	mentor = Mentor.get_by_person(person['key'])

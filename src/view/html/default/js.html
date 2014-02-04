@@ -1,3 +1,10 @@
 <script src="/js/jquery.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/js/helper.js"></script>
+<script src='/js/jquery.validate.js'></script>
+<script>
+	{% if reload is not none %}
+	    reload = {{ reload[0] }}
+		errors = {{ reload[1] }}   
+	{% endif %}
+</script>

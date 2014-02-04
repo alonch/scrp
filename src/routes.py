@@ -1,17 +1,28 @@
 import os, urllib, webapp2, jinja2, db, json
 from google.appengine.ext import ndb
-import logging
+import logging, json
+import datetime
 
 env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)+"/view/html"),
     extensions=['jinja2.ext.autoescape'],
     autoescape=False)
 
-def get_env(req):
+def get_json_request(req):
+    keys = req.arguments()
+    values = []
+    for key in keys:
+        values.append(req.get(key))
+    data = json.dumps(dict(zip(keys, values)))
+    return data
+
+
+def get_env(req, data=None):
     content = {}
+    content['reload'] = data
     content['head'] = env.get_template('default/head.html').render()
     content['header'] = get_header(req)
-    content['js'] = env.get_template('default/js.html').render()
+    content['js'] = env.get_template('default/js.html').render(content)
     return content
 
 def get_header(req):
@@ -28,7 +39,7 @@ def render(res, page, keys=[], content={}):
     for key in keys:
         content[key] = env.get_template('%s/%s.html' % (page,key)).render()
     res.write(html.render(content))
-
+ 
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
@@ -37,14 +48,18 @@ class MainPage(webapp2.RequestHandler):
 
 class SignUpPage(webapp2.RequestHandler):
 
-    def get(self):
-    	content = get_env(self.request)
+    def get(self, data=None):
+    	content = get_env(self.request, data)
         render(self.response, 'sign-up', ['mentee', 'mentor'], content)
 
     def post(self):
         get = self.request.get
         person = db.Person()
         db.request_python_parser(person, get)
+        if db.Person.query(db.Person.email == person.email).count() > 0:
+            data = get_json_request(self.request)
+            return self.get((data,{'email':"Sorry, this email is already in our database"}))
+
         personKey = person.put()
         typ = get('personType')
         if typ == 'Mentor':
@@ -95,10 +110,41 @@ class TestPage(webapp2.RequestHandler):
             if isinstance(getattr(cls, key),ndb.Property):
                 self.response.write(key +'<br>' )
 
+class MediaPolicyPage(webapp2.RequestHandler):
+
+    def get(self, data = None):
+        content = get_env(self.request, data)
+        render(self.response, 'media-policy', content=content)
+
+    def post(self):
+        email = self.request.get('email')
+        query = db.Person.query(db.Person.email == email)
+        person = query.get()
+        if person == None:
+            data = get_json_request(self.request)
+            return self.get((data,{'email':"Sorry, this email is not in our database"}))
+        initials = self.request.get('initials').lower()
+        db_initials = (person.first_name[0]+person.last_name[0]).lower()
+        if initials != db_initials:
+            data = get_json_request(self.request)
+            return self.get((data,{'initials':"Sorry, this initials does not macth with our database"}))
+        
+        today = self.request.get('today')
+        db_today = datetime.datetime.now().strftime("%Y-%m-%d") 
+
+        if today != db_today:
+            data = get_json_request(self.request)
+            error = "Sorry, this is %s and you said %s" % (db_today,today)
+            return self.get((data,{'today':str(error)}))
+            
+        person.h_media_signed = True
+        person.put()
+
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/sign-up', SignUpPage),
     ('/mentors', ShowMentorPage),
     ('/mentors/clear', ClearMentorPage),
-    ('/test', TestPage)
+    ('/test', TestPage),
+    ('/media-policy', MediaPolicyPage)
 ], debug=True)
