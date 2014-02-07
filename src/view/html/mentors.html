@@ -20,12 +20,13 @@
 							<th>Affiliation</th>
 							<th>Status</th>
 							<th>Discipline</th>
-							<th>CPR</th>
+							<th>Media Policy</th>
 						</tr>
 					</thead>
 					<tbody>
 						{% for mentor in mentors %}
 							<tr>
+								<!-- {{ mentor }}  -->
 								<td style='display:None;'>{{mentor['key']}}</td>
 								<td>{{loop.index}}</td>
 								<td>{{mentor['last_name']}}, {{mentor['first_name']}}</td>
@@ -36,7 +37,7 @@
 								<td>{{mentor['affiliation_status']}}</td>
 								<td width='20%'><small>{{mentor['discipline']}}</small></td>
 								<td>
-									{% if mentor['cpr_trained'] %}
+									{% if mentor['h_media_signed'] %}
 									<input type="checkbox" checked onclick="return false">
 									{% else %}
 									<input type="checkbox" onclick="return false">

@@ -77,7 +77,7 @@ class SignUpPage(webapp2.RequestHandler):
             self.response.write("error.. :/ sorry")
             return
 
-        self.response.write("ok")
+        self.redirect('/policy/media')
 
   
 class ShowMentorPage(webapp2.RequestHandler):
@@ -110,35 +110,62 @@ class TestPage(webapp2.RequestHandler):
             if isinstance(getattr(cls, key),ndb.Property):
                 self.response.write(key +'<br>' )
 
-class MediaPolicyPage(webapp2.RequestHandler):
+class PolicyPage(webapp2.RequestHandler):
 
-    def get(self, data = None):
+    def get(self, policy, data = None):
         content = get_env(self.request, data)
-        render(self.response, 'media-policy', content=content)
+        policy = policy.lower()
+        content['policy'] = policy
+        if policy == 'media':
+            content['policy_url'] = 'http://docs.google.com/viewer?url=https%3A%2F%2Fdocs.google.com%2Fuc%3Fexport%3Ddownload%26id%3D0B9UhTc1-I_vLcUtCTU5DbUxsZFk&embedded=true'
+            content['title'] = 'Media Policy - Part 1 of 2'
+            content['form_url'] = 'policy/media'
+        elif policy == 'liability':
+            content['policy_url'] = 'http://docs.google.com/viewer?url=https%3A%2F%2Fdocs.google.com%2Fuc%3Fexport%3Ddownload%26id%3D0B9UhTc1-I_vLZnB6NDB0ajkzMEE&embedded=true'
+            content['title'] = 'Liability Policy - Part 2 of 2'
+            content['form_url'] = 'policy/liability'
+        else:
+            self.response.redirect('page404')
+        render(self.response, 'policy', content=content)
 
-    def post(self):
+    def post(self, policy):
         email = self.request.get('email')
         query = db.Person.query(db.Person.email == email)
         person = query.get()
         if person == None:
             data = get_json_request(self.request)
-            return self.get((data,{'email':"Sorry, this email is not in our database"}))
+            return self.get(policy, (data,{'email':"Sorry, this email is not in our database"}))
         initials = self.request.get('initials').lower()
         db_initials = (person.first_name[0]+person.last_name[0]).lower()
         if initials != db_initials:
             data = get_json_request(self.request)
-            return self.get((data,{'initials':"Sorry, this initials does not macth with our database"}))
+            return self.get(policy, (data,{'initials':"Sorry, this initials does not macth with our database"}))
         
         today = self.request.get('today')
-        db_today = datetime.datetime.now().strftime("%Y-%m-%d") 
-
-        if today != db_today:
+        today = datetime.datetime.strptime(today, "%Y-%m-%d")
+        db_less_time = datetime.datetime.now() - datetime.timedelta(hours=8) 
+        db_more_time = datetime.datetime.now() + datetime.timedelta(hours=8)
+        if today >= db_less_time and today >= db_more_time:
             data = get_json_request(self.request)
-            error = "Sorry, this is %s and you said %s" % (db_today,today)
-            return self.get((data,{'today':str(error)}))
-            
-        person.h_media_signed = True
-        person.put()
+            error = "Sorry, this is not today, remember the format is MONTH-DAY-YEAR"
+            return self.get(policy, (data,{'today':error}))
+        if policy == 'media':    
+            person.h_media_signed = True
+            person.h_media_date = datetime.datetime.now()
+            person.put()
+            self.redirect('/policy/liability')
+        elif policy == 'liability':
+            person.h_liability_signed = True
+            person.h_liability_date = datetime.datetime.now()
+            person.h_address = self.request.get('address')
+            person.put()
+            self.redirect('/thank-you')
+
+class ThankYouPage(webapp2.RequestHandler):
+
+    def get(self):
+        content = get_env(self.request)
+        render(self.response, 'thank-you', content=content)
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
@@ -146,5 +173,6 @@ application = webapp2.WSGIApplication([
     ('/mentors', ShowMentorPage),
     ('/mentors/clear', ClearMentorPage),
     ('/test', TestPage),
-    ('/media-policy', MediaPolicyPage)
+    ('/policy/(\w+)', PolicyPage),
+    ('/thank-you', ThankYouPage)
 ], debug=True)

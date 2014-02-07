@@ -13,17 +13,30 @@ $(document).ready(function(){
           	email: true
         },
         phone:{
-        	required: true
+        	required: true,
+          phone: true
         },
         reference_name1:{
         	required: true
         },
         reference_phone1:{
-        	required: true
+        	required: true,
+          phone: true
         },
         reference_email1:{
         	required: true,
         	email: true
+        },
+        reference_name2:{
+          required: true
+        },
+        reference_phone2:{
+          required: true,
+          phone: true
+        },
+        reference_email2:{
+          required: true,
+          email: true
         }
       },
       highlight: function(element) {

@@ -1187,3 +1187,8 @@ $.format = $.validator.format;
 		}
 	});
 })(jQuery);
+jQuery.validator.addMethod("phone", function (phone_number, element) {
+        phone_number = phone_number.replace(/\s+/g, "");
+        return this.optional(element) || phone_number.length > 9 &&
+              phone_number.match(/^\(?[\d\s]{3}-{0,1}[\d\s]{3}-{0,1}[\d\s]{4}$/);
+    }, "Invalid phone number");

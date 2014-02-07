@@ -15,12 +15,12 @@
 		</style>
 		<div class="panel panel-default content">
 			<div class="panel-body">
-				<h2>Media Policy</h2>
+					<h2>{{ title }}</h2>
 				<center>
-					<iframe src="http://docs.google.com/viewer?url=https%3A%2F%2Fdocs.google.com%2Fuc%3Fexport%3Ddownload%26id%3D0B9UhTc1-I_vLcUtCTU5DbUxsZFk&embedded=true" width="775" height="400" style="border: none;"></iframe>
+					<iframe src="{{ policy_url }}" width="775" height="400" style="border: none;"></iframe>
 				</center>
 				<br>
-				<form class="form-horizontal" role="form" id='acceptance' method='post' action='/media-policy'>
+				<form class="form-horizontal" role="form" id='acceptance' method='post' action='/{{ form_url }}'>
 				  <div class="form-group">
 				    <label for="initials" class="col-sm-2 control-label">Initials</label>
 				    <div class="col-sm-4">
@@ -28,7 +28,7 @@
 				    </div>
 				    <label for="today" class="col-sm-2 control-label">Today</label>
 					<div class="col-sm-4">
-				  		<input type="date" class="form-control" id="today" name='today'>
+				  		<input type="date" class="form-control" id="today" name='today' placeholder='YYYY-MM-DD'>
 					</div>
 				  </div>
 				  <div class="form-group">
@@ -37,6 +37,14 @@
 				      <input type="email" class="form-control" id="email" name='email' placeholder="Email">
 				    </div>
 				  </div>
+				  {% if policy == 'liability' %}
+					  <div class="form-group">
+					    <label for="address" class="col-sm-2 control-label">Address</label>
+					    <div class="col-sm-10">
+					      <input type="text" class="form-control" id="address" name='address' placeholder="Address">
+					    </div>
+					  </div>
+				  {% endif %}
 				  <div class="form-group">
 				    <label for='agree' class='col-sm-offset-1 col-sm-2 control-label'>I Agree</label>
 				    <div class="col-sm-9 checkbox">
@@ -52,6 +60,6 @@
 			</div>
 		</div>
 		{{ js }}
-		<script src="/js/media-policy.js"></script>
+		<script src="/js/policy.js"></script>
 	</body>
 </html>

@@ -14,6 +14,9 @@ $(document).ready(function(){
         },
         agree: {
             required: true
+        },
+        address: {
+            required: true
         }
       },
       highlight: function(element) {

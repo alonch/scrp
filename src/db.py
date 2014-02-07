@@ -8,7 +8,11 @@ class Person(ndb.Model):
     phone = ndb.StringProperty()
     email = ndb.StringProperty()
     h_liability_signed = ndb.BooleanProperty()
+    h_liability_date = ndb.DateTimeProperty()
     h_media_signed = ndb.BooleanProperty()
+    h_media_date = ndb.DateTimeProperty()
+    h_address = ndb.StringProperty()
+
     tshirt_size = ndb.StringProperty()
     personType = ndb.StringProperty()
     gender = ndb.StringProperty()
@@ -16,7 +20,7 @@ class Person(ndb.Model):
     @staticmethod
     def get_mentors():
     	query = Person.query(Person.personType == 'Mentor').order(Person.last_name)
-        persons = gql_json_parser(query)
+        persons = gql_json_parser(query, True)
         for person in persons:
         	mentor = Mentor.get_by_person(person['key'])
         	del mentor['key']
@@ -73,17 +77,20 @@ class Attendance(ndb.Model):
 
 
 
-def gql_json_parser(query_obj):
+def gql_json_parser(query_obj, hidden=False):
     result = []
     for entry in query_obj:
-        result.append(dict([(p, getattr(entry, p)) for p in get_keys(entry.__class__)+['key']]))
+        result.append(dict([(p, getattr(entry, p)) for p in get_keys(entry.__class__, hidden)+['key']]))
     return result
 
-def get_keys(cls):
+def get_keys(cls, hidden=False):
 	attr = []
 	for key in dir(cls):
-            if "key" == key or key[0] == '_' or key[:2] == 'h_':
+            if "key" == key or key[0] == '_':
                 continue
+            if key[:2] == 'h_': 
+                if not hidden:
+                    continue
             if isinstance(getattr(cls, key),ndb.Property):
                 attr.append(key)
 	return attr
