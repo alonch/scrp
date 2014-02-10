@@ -157,7 +157,7 @@ class PolicyPage(webapp2.RequestHandler):
         elif policy == 'liability':
             person.h_liability_signed = True
             person.h_liability_date = datetime.datetime.now()
-            person.h_address = self.request.get('address')
+            #person.h_address = self.request.get('address')
             person.put()
             self.redirect('/thank-you')
 

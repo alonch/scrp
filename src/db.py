@@ -59,7 +59,6 @@ class Mentor(ndb.Model):
 
 	@staticmethod
 	def get_by_person(person_key):
-		logging.info(person_key)
 		query = Mentor.query(Mentor.h_person == person_key)
 		mentor = gql_json_parser(query)
 		return mentor[0] if len(mentor) > 0 else {}
@@ -97,12 +96,10 @@ def get_keys(cls, hidden=False):
 
 def request_python_parser(cls, get):
 	attr = get_keys(cls.__class__)
-	logging.info("attr:%s" % str(attr))
 	for key in attr:
 		value = get(key)
 
 		typ = type(getattr(cls.__class__, key))
-		logging.info("key:%s, type:%s" % (key, str(typ)))
 		if typ == ndb.BooleanProperty:
 			value = value != ''
 		elif typ == ndb.DateProperty:
