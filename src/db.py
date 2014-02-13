@@ -1,6 +1,10 @@
 from google.appengine.ext import ndb
+from requestHelper import isModerator
 from datetime import datetime
 import logging
+
+class Moderator(ndb.Model):
+    email = ndb.StringProperty()
 
 class Person(ndb.Model):
     first_name = ndb.StringProperty()
@@ -29,10 +33,10 @@ class Person(ndb.Model):
 
 class Kid(ndb.Model):
 	h_person = ndb.KeyProperty()
-	parents = ndb.KeyProperty(repeated=True)
+	h_parents = ndb.KeyProperty(repeated=True)
 	grade = ndb.StringProperty()
 	school = ndb.StringProperty()
-	recomended = ndb.BooleanProperty()
+	h_recomended = ndb.BooleanProperty()
 	birthdate = ndb.DateProperty()
 
 class Mentor(ndb.Model):
@@ -108,3 +112,14 @@ def request_python_parser(cls, get):
 		#	return int(value)
 
 		setattr(cls, key, value)
+
+
+def addModerators():
+    moderators = ['alonchb@gmail.com', "pammanjarres@gmail.com", 'robots@ucalgary.ca', 'redjie.olino@gmail.com', 'ralorsa@ucalgary.ca' ]
+    for moderator in moderators:
+        if Moderator.query(Moderator.email == moderator).count() == 0:
+            m = Moderator()
+            m.email = moderator
+            m.put()
+
+addModerators()

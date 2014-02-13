@@ -1,5 +1,6 @@
 import os, urllib, webapp2, jinja2, db, json
 from google.appengine.ext import ndb
+from requestHelper import isModerator
 import logging, json
 import datetime
 
@@ -17,9 +18,7 @@ def get_json_request(req):
     return data
 
 
-def get_env(req, data=None):
-    content = {}
-    content['reload'] = data
+def get_env(req, **content ):
     content['head'] = env.get_template('default/head.html').render()
     content['header'] = get_header(req)
     content['js'] = env.get_template('default/js.html').render(content)
@@ -37,7 +36,7 @@ def get_header(req):
 def render(res, page, keys=[], content={}):
     html = env.get_template('%s.html' % page)
     for key in keys:
-        content[key] = env.get_template('%s/%s.html' % (page,key)).render()
+        content[key] = env.get_template('%s/%s.html' % (page,key)).render(content)
     res.write(html.render(content))
  
 class MainPage(webapp2.RequestHandler):
@@ -49,8 +48,9 @@ class MainPage(webapp2.RequestHandler):
 class SignUpPage(webapp2.RequestHandler):
 
     def get(self, data=None):
-    	content = get_env(self.request, data)
-        render(self.response, 'sign-up', ['mentee', 'mentor'], content)
+
+    	content = get_env(self.request, reload=data,)
+        render(self.response, 'sign-up', ['person','mentee', 'mentor'], content)
 
     def post(self):
         get = self.request.get
@@ -83,11 +83,19 @@ class SignUpPage(webapp2.RequestHandler):
 class ShowMentorPage(webapp2.RequestHandler):
 
     def get(self):
+        if not isModerator(self):
+            return
+
         content = get_env(self.request)
         mentors = db.Person.get_mentors()
         for mentor in mentors:
             mentor['key'] = mentor['key'].id()
+            temp = mentor['h_liability_date']
+            mentor['h_liability_date']= temp.strftime("%Y-%m-%d") if temp is not None else ''
+            temp = mentor['h_media_date'] 
+            mentor['h_media_date'] = temp.strftime("%Y-%m-%d") if temp is not None else ''
         content['mentors'] = mentors
+        content['mentors_json'] = json.dumps(mentors)
 
         render(self.response, 'mentors',content=content)    
 
@@ -113,7 +121,7 @@ class TestPage(webapp2.RequestHandler):
 class PolicyPage(webapp2.RequestHandler):
 
     def get(self, policy, data = None):
-        content = get_env(self.request, data)
+        content = get_env(self.request, reload=data)
         policy = policy.lower()
         content['policy'] = policy
         if policy == 'media':
@@ -171,7 +179,7 @@ application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/sign-up', SignUpPage),
     ('/mentors', ShowMentorPage),
-    ('/mentors/clear', ClearMentorPage),
+    #('/mentors/clear', ClearMentorPage),
     ('/test', TestPage),
     ('/policy/(\w+)', PolicyPage),
     ('/thank-you', ThankYouPage)

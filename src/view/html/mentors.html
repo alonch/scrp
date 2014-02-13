@@ -9,6 +9,9 @@
 		<h2>Mentors</h2>
 		<div class="panel panel-default content">
 			<div class="panel-body">
+				<div class='col-sm-12'>
+					<button type="button" class="btn btn-default " onclick='copyEmails()'>Copy emails</button>
+				</div>
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -52,5 +55,11 @@
 				
 			</div>
 		</div>
+		{{ js }}
+
+		<script type="text/javascript">
+		var mentors = {{ mentors_json }}
+		</script>
+		<script src="/js/mentors.js"></script>
 	</body>
 </html>

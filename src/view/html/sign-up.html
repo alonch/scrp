@@ -25,13 +25,13 @@
 				<h3> I am looking to partipate as:</h3>
 		 		</div>
 		 		<div class="btn-group col-sm-offset-3 col-sm-9" data-toggle="buttons-radio" style='margin-bottom:15px;'>
-				  <button type="button" class="btn btn-default active" onclick="select(this)">Mentor</button>
-				  <button type="button" class="btn btn-default" onclick="select(this)" disabled>Mentee</button>
+				  <button type="button" class="btn btn-default active" onclick="select(this)" id='Mentor'>Mentor</button>
+				  <button type="button" class="btn btn-default" onclick="return false;//select(this)" disabled id='Mentee'>Mentee</button>
 				</div>
 
 				<div class="tab-content" >
 					<div class="tab-pane active" id="mentor"> {{ mentor }} </div>
-					<div class="tab-pane" id="mentee"> {{ mentee}} </div>
+					<div class="tab-pane active" id="mentee"> {{ mentee}} </div>
 				</div>
 			</div>
 		</div>
