@@ -112,14 +112,3 @@ def request_python_parser(cls, get):
 		#	return int(value)
 
 		setattr(cls, key, value)
-
-
-def addModerators():
-    moderators = ['alonchb@gmail.com', "pammanjarres@gmail.com", 'robots@ucalgary.ca', 'redjie.olino@gmail.com', 'ralorsa@ucalgary.ca' ]
-    for moderator in moderators:
-        if Moderator.query(Moderator.email == moderator).count() == 0:
-            m = Moderator()
-            m.email = moderator
-            m.put()
-
-addModerators()
